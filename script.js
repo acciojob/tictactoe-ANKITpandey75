@@ -5,83 +5,94 @@ const message = document.querySelector(".message");
 
 let player1 = "";
 let player2 = "";
-let current = "X";
-let board = ["","","","","","","","",""];
+
+let turn = "x";
 let gameOver = false;
 
-const cells = document.querySelectorAll(".cell");
+let board = ["", "", "", "", "", "", "", "", ""];
 
-submit.onclick = function(){
+const winPatterns = [
+    [0,1,2],
+    [3,4,5],
+    [6,7,8],
+    [0,3,6],
+    [1,4,7],
+    [2,5,8],
+    [0,4,8],
+    [2,4,6]
+];
+
+submit.addEventListener("click",function(){
 
     player1 = document.getElementById("player-1").value;
     player2 = document.getElementById("player-2").value;
 
-    setup.style.display = "none";
-    game.style.display = "block";
+    setup.style.display="none";
+    game.style.display="block";
 
-    message.innerText = `${player1}, you're up`;
-};
+    message.innerText = player1 + ", you're up";
+});
 
-const wins = [
-[0,1,2],
-[3,4,5],
-[6,7,8],
-[0,3,6],
-[1,4,7],
-[2,5,8],
-[0,4,8],
-[2,4,6]
-];
+const cells=document.querySelectorAll(".cell");
 
 cells.forEach((cell,index)=>{
 
-    cell.onclick=function(){
+    cell.addEventListener("click",function(){
 
-        if(board[index]!=="" || gameOver) return;
+        if(gameOver) return;
 
-        board[index]=current;
-        cell.innerText=current;
+        if(board[index]!="") return;
 
-        if(checkWinner()) return;
+        board[index]=turn;
 
-        if(current==="X"){
-            current="O";
-            message.innerText=`${player2}, you're up`;
-        }else{
-            current="X";
-            message.innerText=`${player1}, you're up`;
+        cell.innerText=turn;
+
+        if(checkWinner()){
+            return;
         }
 
-    };
+        if(turn==="x"){
+            turn="o";
+            message.innerText=player2 + ", you're up";
+        }
+        else{
+            turn="x";
+            message.innerText=player1 + ", you're up";
+        }
+
+    });
 
 });
 
 function checkWinner(){
 
-    for(let combo of wins){
+    for(let pattern of winPatterns){
 
-        let [a,b,c]=combo;
+        let a=pattern[0];
+        let b=pattern[1];
+        let c=pattern[2];
 
         if(
-            board[a] &&
+            board[a]!="" &&
             board[a]===board[b] &&
             board[b]===board[c]
         ){
 
             gameOver=true;
 
-            document.getElementById(a+1).classList.add("winner");
-            document.getElementById(b+1).classList.add("winner");
-            document.getElementById(c+1).classList.add("winner");
+            document.getElementById(String(a+1)).classList.add("selected");
+            document.getElementById(String(b+1)).classList.add("selected");
+            document.getElementById(String(c+1)).classList.add("selected");
 
-            let winner=current==="X"?player1:player2;
-
-            message.innerText=`${winner}, congratulations you won!`;
+            if(turn==="x"){
+                message.innerText=player1 + ", congratulations you won!";
+            }else{
+                message.innerText=player2 + ", congratulations you won!";
+            }
 
             return true;
         }
-
     }
 
     return false;
-}//your JS code here. If required.
+}

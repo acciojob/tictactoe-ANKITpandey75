@@ -1,4 +1,11 @@
+.container{
+    text-align:center;
+}
+
 .board{
+    width:300px;
+    margin:20px auto;
+
     display:grid;
     grid-template-columns:repeat(3,100px);
     grid-template-rows:repeat(3,100px);
@@ -6,19 +13,19 @@
 
 .cell{
     border:1px solid black;
+    background:pink;
     display:flex;
     justify-content:center;
     align-items:center;
-    font-size:40px;
+    font-size:50px;
     cursor:pointer;
-    background:pink;
 }
 
-.winner{
+.selected{
     background:purple;
     color:white;
 }
 
 .message{
-    text-align:center;
-}/*  your css code here. If applicable */
+    font-weight:bold;
+}
